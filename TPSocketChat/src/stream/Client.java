@@ -16,7 +16,7 @@ import java.util.ListIterator;
 
 public class Client {
 
-	static LinkedList<String> messages;
+	
 	
 	
   /**
@@ -25,58 +25,66 @@ public class Client {
   **/
     public static void main(String[] args) throws IOException {
 
+    	
         Socket echoSocket = null;
         PrintStream socOut = null;
         BufferedReader stdIn = null;
         BufferedReader socIn = null;
         
-        messages = new LinkedList<String>();
+         
 
 
-        try {
+        try 
+        {
       	    // creation socket ==> connexion
       	    echoSocket = new Socket(args[0],new Integer(args[1]).intValue());
-		    socIn = new BufferedReader(
-		    		          new InputStreamReader(echoSocket.getInputStream())); 
+      	    
+      	    //Classe BufferedReader permet de lire les caracteres a partir d un flux tamponne
+      	    //Lire ce que le server ecrit
+		    socIn = new BufferedReader(new InputStreamReader(echoSocket.getInputStream())); 
 		    
+		    //Permet d ajouter a un flux un texte de types primitifs et de chaine de caracteres
 		    socOut= new PrintStream(echoSocket.getOutputStream());
+		    
+		    //Lire ce que le systeme ecrit
 		    stdIn = new BufferedReader(new InputStreamReader(System.in));
 		    
 		    
 		    
-        } catch (UnknownHostException e) {
+        } 
+        catch (UnknownHostException e) 
+        {
             System.err.println("Don't know about host:" + args[0]);
             System.exit(1);
-        } catch (IOException e) {
-            System.err.println("Couldn't get I/O for "
-                               + "the connection to:"+ args[0]);
+        } 
+        catch (IOException e) 
+        {
+            System.err.println("Couldn't get I/O for "+ "the connection to:"+ args[0]);
             System.exit(1);
         }
                              
-        String line;
-        while (true) {
-        	line=stdIn.readLine();
+        String lineClient;
+        String lineServer;
+        while (true) 
+        {
+        	//On lit et on affiche ce que le server envoie
+        	lineServer=socIn.readLine();
+        	System.out.println(lineServer);
         	
-        	//On ajoute le message a la liste de message de tous les client
-        	messages.add(line);
+        	//On lit ce qu on ecrit
         	
-        	if (messages.size()!=0)
-			{
-				//System.out.println("Ajout !");
-				
-				
-			    socOut.println(messages.getLast());
-			    
-			}
+        	lineClient=stdIn.readLine();
+        	socOut.println(lineServer);
         	
-        	if (line.equals(".")) break;
-        	socOut.println(line);
-        	System.out.println("echo: " + socIn.readLine());
+        	
+        	if (lineClient.equals(".")) break;
+        	//socOut.println(lineClient);
+        	//System.out.println("echo: " + socIn.readLine());
         }
-      socOut.close();
-      socIn.close();
-      stdIn.close();
-      echoSocket.close();
+		socOut.close();
+		socIn.close();
+		stdIn.close();
+		echoSocket.close();
     }
 }
 
