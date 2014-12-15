@@ -1,6 +1,7 @@
 
+
 /***
- * ClientThread
+ * ServerThread
  * Example of a TCP server
  * Date: 14/12/08
  * Authors:
@@ -12,15 +13,16 @@ import java.net.*;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-public class ClientThread extends Thread 
+public class ServerThread extends Thread 
 {
 	
 	private Socket clientSocket;
+	private int numero;
 
-	static LinkedList<String> messages= new LinkedList<String>();
 	
-	ClientThread (Socket s) {
+	ServerThread (Socket s, int num) {
 		this.clientSocket = s;
+		this.numero = num;
 	}
 
  	/**
@@ -35,6 +37,7 @@ public class ClientThread extends Thread
     		PrintStream socOut=new PrintStream(clientSocket.getOutputStream());
     		
     		String lineClient;
+            String lineServer;
     		while (true) 
     		{
     			
@@ -44,22 +47,13 @@ public class ClientThread extends Thread
 	        	//socOut.println(lineServer);
 	    		
     			lineClient = socIn.readLine();
-    			//socOut.println("nouveau message");
-    			System.out.println(lineClient);
+    			socOut.println(lineClient);
     			
-	    		//On ajoute le message a la conversasion commune a tous les clients
-	          	messages.add(lineClient);
-	          	
-	          	if (messages.size()!=0)
-	  			{
-	          		
-	  			    //System.out.println("fail : "+messages.getLast());
-	  			    
-	  			}
+    			
 	    		
 	          	//On envoie le message aux autres clients
 	    		  
-	    		  /*ListIterator<ClientThread> iter = Server.clients.listIterator();
+	    		  /*ListIterator<ServerThread> iter = Server.clients.listIterator();
 				    while (iter.hasNext())
 				    {
 				    	//socOut = iter.next().getClientSocket().getOutputStream();
@@ -81,5 +75,9 @@ public class ClientThread extends Thread
 		return clientSocket;
 	}
 	
+	int getNum()
+	{
+		return numero;
+	}
   
 }

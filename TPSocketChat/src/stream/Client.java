@@ -31,7 +31,11 @@ public class Client {
         BufferedReader stdIn = null;
         BufferedReader socIn = null;
         
-         
+        if (args.length < 2) {
+			System.out
+					.println("Usage: java ClientEnvoi <Serveur host> <Serveur port>");
+			System.exit(1);
+		}
 
 
         try 
@@ -62,19 +66,27 @@ public class Client {
             System.err.println("Couldn't get I/O for "+ "the connection to:"+ args[0]);
             System.exit(1);
         }
-                             
+        ClientThread ct = new ClientThread(echoSocket);
+        ct.start();
+        
+        /* Pseudo */
+		System.out.println("Veuillez entrer votre pseudo: ");
+		String pseudo;
+		pseudo = stdIn.readLine();
+        
+		/* Debut du chat */
         String lineClient;
         String lineServer;
         while (true) 
         {
         	//On lit et on affiche ce que le server envoie
-        	lineServer=socIn.readLine();
-        	System.out.println(lineServer);
+        	//lineServer=socIn.readLine();
+        	//System.out.println(lineServer);
         	
         	//On lit ce qu on ecrit
         	
         	lineClient=stdIn.readLine();
-        	socOut.println(lineServer);
+        	//socOut.println(lineServer);
         	
         	
         	if (lineClient.equals(".")) break;

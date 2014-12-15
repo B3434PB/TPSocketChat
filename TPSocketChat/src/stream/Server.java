@@ -15,7 +15,7 @@ import java.util.ListIterator;
 public class Server  {
   
 	//Repertorier l ensemble des clients connectes au serveur
-	public static LinkedList<ClientThread> clients= new LinkedList<ClientThread>();
+	public static LinkedList<ServerThread> clients= new LinkedList<ServerThread>();
 	
 	
  	/**
@@ -56,9 +56,9 @@ public class Server  {
 				out.flush();
 				
 				
-				//Lorsqu un client souhaite se connecter au server on creer un objet clientThread
+				//Lorsqu un client souhaite se connecter au server on creer un objet ServerThread
 				//pour communiquer avec le client
-				ClientThread ct = new ClientThread (clientSocket, nbClients);
+				ServerThread ct = new ServerThread (clientSocket, nbClients);
 				
 				//On ajoute le client a la liste de clients
 				clients.add(ct);
@@ -70,7 +70,7 @@ public class Server  {
 				{
 					//System.out.println("Ajout !");
 					
-					ListIterator<ClientThread> iter = Server.clients.listIterator();
+					ListIterator<ServerThread> iter = Server.clients.listIterator();
 				    while (iter.hasNext())
 				    {
 				    	System.out.println("Connexion from:" +iter.next().getClientSocket().getInetAddress());
