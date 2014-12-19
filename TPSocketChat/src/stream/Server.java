@@ -10,13 +10,13 @@ import java.io.*;
 import java.net.*;
 import java.util.LinkedList;
 import java.util.ListIterator;
-
+import java.util.ArrayList;
 
 public class Server  {
   
 	//Repertorier l ensemble des clients connectes au serveur
-	public static LinkedList<ServerThread> clients= new LinkedList<ServerThread>();
-	
+	//public static LinkedList<ServerThread> clients= new LinkedList<ServerThread>();
+	static ArrayList<ServerThread> threads;
 	
  	/**
   	* main method
@@ -28,7 +28,7 @@ public class Server  {
         PrintWriter out = null;
         BufferedReader in = null;
         int nbClients=1;
-        
+        threads = new ArrayList<ServerThread>();
 	    //On verifie qu on juste un numero de port en parametre    
 	  	if (args.length != 1) {
 	          System.out.println("Usage: java EchoServer <EchoServer port>");
@@ -59,8 +59,8 @@ public class Server  {
 				//Lorsqu un client souhaite se connecter au server on creer un objet ServerThread
 				//pour communiquer avec le client
 				ServerThread ct = new ServerThread (clientSocket, nbClients);
-				
-				//On ajoute le client a la liste de clients
+				threads.add(ct);
+				/*//On ajoute le client a la liste de clients
 				clients.add(ct);
 				
 				//On affiche tous les clients
@@ -75,7 +75,7 @@ public class Server  {
 				    {
 				    	System.out.println("Connexion from:" +iter.next().getClientSocket().getInetAddress());
 				    }//while
-				}//if
+				}//if*/
 				
 				//On met le statut du thread a ready
 				ct.start();
@@ -87,5 +87,13 @@ public class Server  {
 	    }
 	}//main
 	
+	static public void EnvoyerMessage(String message)
+    {
+ 	   for(int i = 0; i < threads.size(); i++)
+ 	   {
+ 		   threads.get(i).Envoyer(message);
+ 	   }
+    }
+	
+	
   }//class
-

@@ -1,5 +1,3 @@
-
-
 /***
  * ServerThread
  * Example of a TCP server
@@ -35,8 +33,9 @@ public class ServerThread extends Thread
     	  {
     		BufferedReader socIn=new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));    
     		PrintStream socOut=new PrintStream(clientSocket.getOutputStream());
-    		
-    		String lineClient;
+    		socIn = new BufferedReader(
+        			new InputStreamReader(clientSocket.getInputStream()));
+
             String lineServer;
     		while (true) 
     		{
@@ -46,8 +45,9 @@ public class ServerThread extends Thread
 	        	//lineServer=socIn.readLine();
 	        	//socOut.println(lineServer);
 	    		
-    			lineClient = socIn.readLine();
-    			socOut.println(lineClient);
+    			lineServer = socIn.readLine();
+    			Server.EnvoyerMessage(lineServer);
+    			socOut.println(lineServer);
     			
     			
 	    		
@@ -79,5 +79,15 @@ public class ServerThread extends Thread
 	{
 		return numero;
 	}
-  
+	
+	public void Envoyer(String message)
+	{
+		try {
+			PrintStream socOut = new PrintStream(clientSocket.getOutputStream());
+			socOut.println(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

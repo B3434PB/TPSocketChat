@@ -1,4 +1,3 @@
-
 /***
  * EchoClient
  * Example of a TCP client 
@@ -32,8 +31,7 @@ public class Client {
         BufferedReader socIn = null;
         
         if (args.length < 2) {
-			System.out
-					.println("Usage: java ClientEnvoi <Serveur host> <Serveur port>");
+			System.out.println("Usage: java ClientEnvoi <Serveur host> <Serveur port>");
 			System.exit(1);
 		}
 
@@ -66,7 +64,7 @@ public class Client {
             System.err.println("Couldn't get I/O for "+ "the connection to:"+ args[0]);
             System.exit(1);
         }
-        ClientThread ct = new ClientThread(echoSocket);
+        ClientThread ct = new ClientThread(socIn);
         ct.start();
         
         /* Pseudo */
@@ -86,7 +84,8 @@ public class Client {
         	//On lit ce qu on ecrit
         	
         	lineClient=stdIn.readLine();
-        	//socOut.println(lineServer);
+        	//System.out.println(pseudo+" : "+lineClient);
+        	socOut.println(pseudo+" : "+lineClient);
         	
         	
         	if (lineClient.equals(".")) break;
@@ -99,5 +98,3 @@ public class Client {
 		echoSocket.close();
     }
 }
-
-
