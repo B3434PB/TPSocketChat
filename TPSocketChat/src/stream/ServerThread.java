@@ -46,10 +46,11 @@ public class ServerThread extends Thread
 	        	//socOut.println(lineServer);
 	    		
     			lineServer = socIn.readLine();
-    			Server.EnvoyerMessage(lineServer);
-
     			
+    			//On ajoute le message a la conversasion commune a tous les clients
+  	          	Server.messages.add(lineServer);
     			
+  	          Server.EnvoyerMessage(lineServer);
 	    		
 	          	//On envoie le message aux autres clients
 	    		  

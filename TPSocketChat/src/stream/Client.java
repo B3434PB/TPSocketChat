@@ -15,7 +15,7 @@ import java.util.ListIterator;
 
 public class Client {
 
-	
+	static String pseudo;
 	
 	
   /**
@@ -68,13 +68,14 @@ public class Client {
         ct.start();
         
         /* Pseudo */
-		System.out.println("Veuillez entrer votre pseudo: ");
-		String pseudo;
+        System.out.println("Veuillez entrer votre pseudo: ");
 		pseudo = stdIn.readLine();
+		
+		
         
 		/* Debut du chat */
         String lineClient;
-        String lineServer;
+
         while (true) 
         {
         	//On lit et on affiche ce que le server envoie
@@ -89,7 +90,7 @@ public class Client {
         	
         	
         	if (lineClient.equals(".")) break;
-        	//socOut.println(lineClient);
+        	socOut.println(lineClient);
         	//System.out.println("echo: " + socIn.readLine());
         }
 		socOut.close();

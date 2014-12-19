@@ -16,7 +16,7 @@ public class ClientThread extends Thread
 	
 	private BufferedReader socIn;
 
-	//static LinkedList<String> messages= new LinkedList<String>();
+	
 	
 	ClientThread (BufferedReader aSocIn) {
 		this.socIn = aSocIn;
@@ -46,10 +46,9 @@ public class ClientThread extends Thread
     			//socOut.println("nouveau message");
     			System.out.println(lineClient);
     			
-	    		//On ajoute le message a la conversasion commune a tous les clients
-	          /*	messages.add(lineClient);
+	    		
 	          	
-	          	if (messages.size()!=0)
+	          	/*
 	  			{
 	          		
 	  			    //System.out.println("fail : "+messages.getLast());
@@ -58,12 +57,7 @@ public class ClientThread extends Thread
 	    		
 	          	//On envoie le message aux autres clients
 	    		  
-	    		  /*ListIterator<ClientThread> iter = Server.clients.listIterator();
-				    while (iter.hasNext())
-				    {
-				    	//socOut = iter.next().getClientSocket().getOutputStream();
-				    	//System.out.println(iter.next().getClientSocket().getInetAddress());
-				    }*/
+	    		 
     	    	  	}//try
     		    	catch (Exception e) 
     		    	{

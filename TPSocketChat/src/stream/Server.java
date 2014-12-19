@@ -9,15 +9,16 @@ package stream;
 import java.io.*;
 import java.net.*;
 import java.util.LinkedList;
-import java.util.ListIterator;
 import java.util.ArrayList;
+import java.util.ListIterator;
+
 
 public class Server  {
   
 	//Repertorier l ensemble des clients connectes au serveur
 	//public static LinkedList<ServerThread> clients= new LinkedList<ServerThread>();
-	static ArrayList<ServerThread> threads;
-	
+	static LinkedList<ServerThread> threads;
+	static ArrayList<String> messages;
  	/**
   	* main method
 	* @param EchoServer port
@@ -28,7 +29,8 @@ public class Server  {
         PrintWriter out = null;
         BufferedReader in = null;
         int nbClients=1;
-        threads = new ArrayList<ServerThread>();
+        threads = new LinkedList<ServerThread>();
+        messages= new ArrayList<String>();
 	    //On verifie qu on juste un numero de port en parametre    
 	  	if (args.length != 1) {
 	          System.out.println("Usage: java EchoServer <EchoServer port>");
@@ -51,6 +53,17 @@ public class Server  {
 				//On instancie un flux de sortie vers le client qui vient de se connecter
 				out = new PrintWriter (clientSocket.getOutputStream());
 				out.println("Vous etes connectés au server : "+InetAddress.getLocalHost());
+				
+				/*On affiche l'historique */
+				if (messages.isEmpty()!=true)
+				{
+					ListIterator<String> iter = Server.messages.listIterator();
+				    while (iter.hasNext())
+				    {
+				    	//socOut = iter.next().getClientSocket().getOutputStream();
+				    	out.println(iter.next());
+				    }
+				}
 				
 				//Pour vider le buffer
 				out.flush();
