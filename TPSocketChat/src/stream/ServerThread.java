@@ -47,7 +47,7 @@ public class ServerThread extends Thread
 	    		
     			lineServer = socIn.readLine();
     			Server.EnvoyerMessage(lineServer);
-    			socOut.println(lineServer);
+
     			
     			
 	    		
