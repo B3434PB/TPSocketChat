@@ -19,6 +19,8 @@ public class Server  {
 	//public static LinkedList<ServerThread> clients= new LinkedList<ServerThread>();
 	static LinkedList<ServerThread> threads;
 	static ArrayList<String> messages;
+	//private IHMChat fenetreChat;
+
  	/**
   	* main method
 	* @param EchoServer port

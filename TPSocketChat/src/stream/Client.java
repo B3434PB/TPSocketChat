@@ -16,6 +16,7 @@ import java.util.ListIterator;
 public class Client {
 
 	static String pseudo;
+
 	
 	
   /**
@@ -66,6 +67,7 @@ public class Client {
         }
         ClientThread ct = new ClientThread(socIn);
         ct.start();
+		IHMChat fenetreChat = new IHMChat();
         
         /* Pseudo */
         System.out.println("Veuillez entrer votre pseudo: ");
@@ -90,7 +92,7 @@ public class Client {
         	
         	
         	if (lineClient.equals(".")) break;
-        	socOut.println(lineClient);
+        	//socOut.println(lineClient);
         	//System.out.println("echo: " + socIn.readLine());
         }
 		socOut.close();
