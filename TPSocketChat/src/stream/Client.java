@@ -67,13 +67,11 @@ public class Client {
         }
         ClientThread ct = new ClientThread(socIn);
         ct.start();
-		IHMChat fenetreChat = new IHMChat();
+		IHMLogin fenetreLogin = new IHMLogin();
         
         /* Pseudo */
-        System.out.println("Veuillez entrer votre pseudo: ");
-		pseudo = stdIn.readLine();
-		
-		
+        //System.out.println("Veuillez entrer votre pseudo: ");
+		//pseudo = stdIn.readLine();		
         
 		/* Debut du chat */
         String lineClient;
