@@ -8,6 +8,7 @@ package stream;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -15,10 +16,9 @@ import java.util.ListIterator;
 
 public class Client {
 
-	static String pseudo;
+	//static String pseudo;
+	//static String couplePseudo;
 
-	
-	
   /**
   *  main method
   *  accepts a connection, receives a message from client then sends an echo to the client
@@ -65,9 +65,17 @@ public class Client {
             System.err.println("Couldn't get I/O for "+ "the connection to:"+ args[0]);
             System.exit(1);
         }
-        ClientThread ct = new ClientThread(socIn);
+        IHMLogin fenetreLogin = new IHMLogin();
+        while(!fenetreLogin.getPseudosEntres()){
+        	System.out.println("");
+        }
+        
+        String couplePseudo=fenetreLogin.getPseudoEntre()+fenetreLogin.getEmplacementLogin().getText();
+		Server.historiqueParBinome.put(couplePseudo, new ArrayList<String>());
+        ClientThread ct = new ClientThread(socIn, fenetreLogin.getPseudoEntre(), fenetreLogin.getEmplacementLogin().getText());
+        System.out.println(couplePseudo);
+        fenetreLogin.dispose();
         ct.start();
-		IHMLogin fenetreLogin = new IHMLogin();
         
         /* Pseudo */
         //System.out.println("Veuillez entrer votre pseudo: ");
@@ -86,7 +94,7 @@ public class Client {
         	
         	lineClient=stdIn.readLine();
         	//System.out.println(pseudo+" : "+lineClient);
-        	socOut.println(pseudo+" : "+lineClient);
+        	socOut.println(ct.getPseudoClient()+" : "+lineClient);
         	
         	
         	if (lineClient.equals(".")) break;
@@ -98,4 +106,5 @@ public class Client {
 		stdIn.close();
 		echoSocket.close();
     }
+    
 }

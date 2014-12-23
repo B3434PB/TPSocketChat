@@ -11,6 +11,7 @@ import java.net.*;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.TreeMap;
 
 
 public class Server  {
@@ -19,7 +20,7 @@ public class Server  {
 	//public static LinkedList<ServerThread> clients= new LinkedList<ServerThread>();
 	static LinkedList<ServerThread> threads;
 	static ArrayList<String> messages;
-	//private IHMChat fenetreChat;
+	static TreeMap<String, ArrayList<String>> historiqueParBinome;
 
  	/**
   	* main method
@@ -32,6 +33,9 @@ public class Server  {
         BufferedReader in = null;
         int nbClients=1;
         threads = new LinkedList<ServerThread>();
+        
+        historiqueParBinome = new TreeMap<String, ArrayList<String>>();
+
         messages= new ArrayList<String>();
 	    //On verifie qu on juste un numero de port en parametre    
 	  	if (args.length != 1) {

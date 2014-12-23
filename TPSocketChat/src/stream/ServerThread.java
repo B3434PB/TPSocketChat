@@ -50,7 +50,7 @@ public class ServerThread extends Thread
     			//On ajoute le message a la conversasion commune a tous les clients
   	          	Server.messages.add(lineServer);
     			
-  	          Server.EnvoyerMessage(lineServer);
+  	          	Server.EnvoyerMessage(lineServer);
 	    		
 	          	//On envoie le message aux autres clients
 	    		  

@@ -15,11 +15,15 @@ public class ClientThread extends Thread
 {
 	
 	private BufferedReader socIn;
+	private String pseudoClient;
+	private String pseudoBinome;
 
 	
 	
-	ClientThread (BufferedReader aSocIn) {
+	ClientThread (BufferedReader aSocIn, String loginClient, String loginBinome) {
 		this.socIn = aSocIn;
+		pseudoClient=loginClient;
+		pseudoBinome=loginBinome;
 	}
 
  	/**
@@ -73,6 +77,12 @@ public class ClientThread extends Thread
 	{
 		return clientSocket;
 	}*/
+	
+	
+	public String getPseudoClient() 
+	{
+		return pseudoClient;
+	}
 	
   
 }
