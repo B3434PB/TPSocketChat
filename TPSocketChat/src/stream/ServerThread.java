@@ -15,12 +15,10 @@ public class ServerThread extends Thread
 {
 	
 	private Socket clientSocket;
-	private int numero;
 
 	
-	ServerThread (Socket s, int num) {
+	ServerThread (Socket s) {
 		this.clientSocket = s;
-		this.numero = num;
 	}
 
  	/**
@@ -33,34 +31,50 @@ public class ServerThread extends Thread
     	  {
     		BufferedReader socIn=new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));    
     		PrintStream socOut=new PrintStream(clientSocket.getOutputStream());
-    		socIn = new BufferedReader(
-        			new InputStreamReader(clientSocket.getInputStream()));
+    		socIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
             String lineServer;
     		while (true) 
     		{
     			
-	    		
-	    		//On lit et on affiche ce que le server envoie
-	        	//lineServer=socIn.readLine();
-	        	//socOut.println(lineServer);
-	    		
+    			
+	    		//On lit ce que le client écrit
     			lineServer = socIn.readLine();
     			
-    			//On ajoute le message a la conversasion commune a tous les clients
-  	          	Server.messages.add(lineServer);
-    			
+    			if(lineServer.startsWith("%insert%"))
+    			//code pour ajouter un client connecté
+    			{
+    				String name="";
+    				for(int i=8;i<lineServer.length();i++)
+    				{
+    					name+=lineServer.charAt(i);
+    				}
+    				if(Server.clients.contains(name)==false)
+    				{
+    					Server.clients.add(name);
+    				}
+    			}
+    			else if(lineServer.startsWith("%remove%"))
+    			//code pour retirer un client déconnecté
+    			{
+    				String name="";
+    				for(int i=8;i<lineServer.length();i++)
+    				{
+    					name+=lineServer.charAt(i);
+    				}
+    				Server.clients.remove(name);
+    			}
+    			else if(lineServer.startsWith("%quit%")==false)
+    			//Il s'agit d'un message
+    			{
+    				//On ajoute le message a la conversasion commune a tous les clients
+      	          	Server.messages.add(lineServer);
+    			}
+
+  	          	//On envoie le message à tous les clients
   	          	Server.EnvoyerMessage(lineServer);
-	    		
-	          	//On envoie le message aux autres clients
-	    		  
-	    		  /*ListIterator<ServerThread> iter = Server.clients.listIterator();
-				    while (iter.hasNext())
-				    {
-				    	//socOut = iter.next().getClientSocket().getOutputStream();
-				    	//System.out.println(iter.next().getClientSocket().getInetAddress());
-				    }*/
-	    		  
+  	          	
+  
 	    		
     		}//while
     	}//try
@@ -76,16 +90,13 @@ public class ServerThread extends Thread
 		return clientSocket;
 	}
 	
-	int getNum()
-	{
-		return numero;
-	}
 	
 	public void Envoyer(String message)
 	{
 		try {
 			PrintStream socOut = new PrintStream(clientSocket.getOutputStream());
 			socOut.println(message);
+			socOut.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

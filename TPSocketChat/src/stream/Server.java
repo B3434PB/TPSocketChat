@@ -13,15 +13,16 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.TreeMap;
 
+import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
+
 
 public class Server  {
   
 	//Repertorier l ensemble des clients connectes au serveur
-	//public static LinkedList<ServerThread> clients= new LinkedList<ServerThread>();
 	static LinkedList<ServerThread> threads;
 	static ArrayList<String> messages;
-	static TreeMap<String, ArrayList<String>> historiqueParBinome;
-
+	static ArrayList<String> clients;
  	/**
   	* main method
 	* @param EchoServer port
@@ -31,12 +32,12 @@ public class Server  {
         ServerSocket listenSocket;
         PrintWriter out = null;
         BufferedReader in = null;
-        int nbClients=1;
-        threads = new LinkedList<ServerThread>();
         
-        historiqueParBinome = new TreeMap<String, ArrayList<String>>();
-
+        threads = new LinkedList<ServerThread>();
+        clients = new ArrayList<String>();
+        clients.add("ALL");
         messages= new ArrayList<String>();
+        
 	    //On verifie qu on juste un numero de port en parametre    
 	  	if (args.length != 1) {
 	          System.out.println("Usage: java EchoServer <EchoServer port>");
@@ -53,15 +54,25 @@ public class Server  {
 			{
 				//Attends qu un client se connecte
 				Socket clientSocket = listenSocket.accept();
-				System.out.println("Le client n° "+nbClients+" est connecté.");
-	    		nbClients++;
+				System.out.println("Someone joined the conversation !");
 	    		
 				//On instancie un flux de sortie vers le client qui vient de se connecter
 				out = new PrintWriter (clientSocket.getOutputStream());
-				out.println("Vous etes connectés au server : "+InetAddress.getLocalHost());
 				
-				/*On affiche l'historique */
-				if (messages.isEmpty()!=true)
+				/* On affiche tous les clients connectés */
+				if (clients.isEmpty()==false)
+				{
+					out.println(clients.size());
+					ListIterator<String> iter = Server.clients.listIterator();
+				    while (iter.hasNext())
+				    {
+				    	//socOut = iter.next().getClientSocket().getOutputStream();
+				    	out.println("%insert%"+iter.next());
+				    }
+				}
+				
+				/* On affiche l'historique */
+				if (messages.isEmpty()==false)
 				{
 					ListIterator<String> iter = Server.messages.listIterator();
 				    while (iter.hasNext())
@@ -71,30 +82,17 @@ public class Server  {
 				    }
 				}
 				
+				out.println("Server > Me : You are connected to "+InetAddress.getLocalHost()+" ! ");
+				
 				//Pour vider le buffer
 				out.flush();
 				
 				
 				//Lorsqu un client souhaite se connecter au server on creer un objet ServerThread
 				//pour communiquer avec le client
-				ServerThread ct = new ServerThread (clientSocket, nbClients);
+				ServerThread ct = new ServerThread (clientSocket);
 				threads.add(ct);
-				/*//On ajoute le client a la liste de clients
-				clients.add(ct);
 				
-				//On affiche tous les clients
-				
-				
-				if (clients.size()!=0)
-				{
-					//System.out.println("Ajout !");
-					
-					ListIterator<ServerThread> iter = Server.clients.listIterator();
-				    while (iter.hasNext())
-				    {
-				    	System.out.println("Connexion from:" +iter.next().getClientSocket().getInetAddress());
-				    }//while
-				}//if*/
 				
 				//On met le statut du thread a ready
 				ct.start();
@@ -103,6 +101,7 @@ public class Server  {
 		catch (Exception e) 
 		{
 			System.err.println("Error in EchoServer:" + e);
+			e.printStackTrace();
 	    }
 	}//main
 	

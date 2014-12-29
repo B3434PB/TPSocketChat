@@ -1,8 +1,10 @@
 package stream;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 
 import javax.swing.JTextField;
 
@@ -12,34 +14,42 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 
 import java.awt.event.*;
+import java.util.ListIterator;
 
 
 
 public class IHMLogin extends JFrame 
 {
 	private JPanel pan;
+	private JPanel pan2;
+	private JPanel pan3;
 	private JTextField emplacementLogin;
 	private JLabel demandeLogin;
-	public JButton boutonOk;
+	public JButton boutonConnect;
 	private JButton boutonAllUser;
-	private boolean premiereFenetre=true;
-	private String pseudoEntre;
-	private boolean pseudosEntres=false;
-	
+	private String pseudo="";
+	private boolean active=true;
+	private JLabel errors;
+	private String listePseudos[];
+	private int nbPseudos;
 
-	public IHMLogin()
+	public IHMLogin(String[] tab, int taille)
 	{
-		//premiereFenetre=true;
+		listePseudos=tab;
+		nbPseudos=taille;
+		
 		this.setTitle("Login");
 		this.setSize(400, 145);
 	    this.setLocationRelativeTo(null);
-	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);             
-		this.setVisible(true);
+	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 		  
 		//Instanciation d'un objet JPanel
 		pan = new JPanel();
 		pan.setPreferredSize(new Dimension(375, 115));
 		pan.setBackground(Color.LIGHT_GRAY);
+		BoxLayout boxLayout = new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS); // top to bottom
+		this.getContentPane().setLayout(boxLayout);
+		//pan.setLayout(new FlowLayout());
 		this.add(pan);
 
 		//On prévient notre JFrame que notre JPanel sera son content pane
@@ -55,84 +65,89 @@ public class IHMLogin extends JFrame
 		emplacementLogin.setVisible(true);
 		pan.add(emplacementLogin);
 		
-		boutonOk = new JButton("OK");
-		boutonOk.setPreferredSize(new Dimension(53, 32));
-		pan.add(boutonOk);
+		pan2 = new JPanel();
+		pan2.setBackground(Color.LIGHT_GRAY);
+		this.add(pan2);
+		boutonConnect = new JButton("Connect");
+		boutonConnect.setPreferredSize(new Dimension(100, 32));
+		pan2.add(boutonConnect);
 		
-		boutonAllUser = new JButton("Avec tous les utilisateurs");
-		boutonAllUser.setPreferredSize(new Dimension(350, 32));
-		boutonAllUser.setVisible(false);
-		pan.add(boutonAllUser);
+		pan3 = new JPanel();
+		pan3.setBackground(Color.LIGHT_GRAY);
+		this.add(pan3);
+		errors = new JLabel();
+		errors.setForeground(Color.RED);
+		pan3.add(errors);
 		
 		
-		
-		boutonOk.addActionListener(new ActionListener() {
+		boutonConnect.addActionListener(new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				
-				if(premiereFenetre) //premiere fenetre
+			public void actionPerformed(ActionEvent event) {
+				if(emplacementLogin.getText().length()==0) // il faudra aussi faire en sorte que 2 personnes ne puissent pas avoir le même pseudo
 				{
-					if(emplacementLogin.getText().length()==0) // il faudra aussi faire en sorte que 2 personnes ne puissent pas avoir le même pseudo
-					{
-						System.out.println("Votre pseudo doit être composé d'au moins 1 caractère");
-					}
-					else 
-					{
-						pseudoEntre=emplacementLogin.getText();
-						emplacementLogin.setText("");
-						demandeLogin.setPreferredSize(new Dimension(200, 25));
-						demandeLogin.setText("Avec qui voulez vous dialoguer ?");
-						pan.setPreferredSize(new Dimension(400, 145));
-						boutonAllUser.setVisible(true);
-						premiereFenetre=false;
-	
-					}
+					errors.setText("Name must contain at least one character !");
 				}
-				else  //2° fenetre
+				else if(exist(emplacementLogin.getText())==true)
 				{
-					
-					pseudosEntres=true;
-				}
-			}
-		});
-		
-		/*
-		boutonAllUser.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				
-				if(emplacementLogin.getText().length()==0)
-				{
+					errors.setText("Name already chosen by someone else !");
 				}
 				else 
 				{
-					dispose();
+					pseudo=emplacementLogin.getText();
+					errors.setText("");
+					active=false;
 				}
 			}
 		});
-		*/
 		
-		this.setContentPane(pan); 
+		emplacementLogin.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent event) {
+				if(emplacementLogin.getText().length()==0) // il faudra aussi faire en sorte que 2 personnes ne puissent pas avoir le même pseudo
+				{
+					errors.setText("Name must contain at least one character !");
+				}
+				else if(exist(emplacementLogin.getText())==true)
+				{
+					errors.setText("Name already chosen by someone else !");
+				}
+				else 
+				{
+					pseudo=emplacementLogin.getText();
+					errors.setText("");
+					active=false;
+				}
+			}
+		});
+		
+		this.getContentPane().add(pan);
+		this.getContentPane().add(pan2);
+		this.getContentPane().add(pan3); 
+		this.setVisible(true);
 	  }
 	
 	
-	public JButton getBoutonOk()
+	
+	public String getPseudo()
 	{
-		return boutonOk;
+		return pseudo;
 	}
 	
-	public JTextField getEmplacementLogin()
+	public boolean getActivite()
 	{
-		return emplacementLogin;
+		return active;
 	}
 	
-	public String getPseudoEntre()
+	public boolean exist (String aName)
 	{
-		return pseudoEntre;
-	}
-	
-	public boolean getPseudosEntres()
-	{
-		return pseudosEntres;
+		    for(int i=0;i<nbPseudos;i++)
+		    {
+		    	if(listePseudos[i].equals(aName))
+		    	{
+		    		return true;
+		    	}
+		    }
+		
+		return false;
 	}
 }

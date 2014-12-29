@@ -12,23 +12,23 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+import javax.swing.DefaultListModel;
+
 
 
 public class Client {
-
-	//static String pseudo;
-	//static String couplePseudo;
+	
+	//Booléen qui indique que l'on doit arrêter la connexion
 
   /**
   *  main method
   *  accepts a connection, receives a message from client then sends an echo to the client
   **/
     public static void main(String[] args) throws IOException {
-
     	
+    	String pseudo=("");
         Socket echoSocket = null;
         PrintStream socOut = null;
-        BufferedReader stdIn = null;
         BufferedReader socIn = null;
         
         if (args.length < 2) {
@@ -49,11 +49,6 @@ public class Client {
 		    //Permet d ajouter a un flux un texte de types primitifs et de chaine de caracteres
 		    socOut= new PrintStream(echoSocket.getOutputStream());
 		    
-		    //Lire ce que le systeme ecrit
-		    stdIn = new BufferedReader(new InputStreamReader(System.in));
-		    
-		    
-		    
         } 
         catch (UnknownHostException e) 
         {
@@ -65,46 +60,106 @@ public class Client {
             System.err.println("Couldn't get I/O for "+ "the connection to:"+ args[0]);
             System.exit(1);
         }
-        IHMLogin fenetreLogin = new IHMLogin();
-        while(!fenetreLogin.getPseudosEntres()){
-        	System.out.println("");
-        }
         
-        String couplePseudo=fenetreLogin.getPseudoEntre()+fenetreLogin.getEmplacementLogin().getText();
-		Server.historiqueParBinome.put(couplePseudo, new ArrayList<String>());
-        ClientThread ct = new ClientThread(socIn, fenetreLogin.getPseudoEntre(), fenetreLogin.getEmplacementLogin().getText());
-        System.out.println(couplePseudo);
-        fenetreLogin.dispose();
-        ct.start();
+        String pseudos[]=new String[200];
+		int nbPseudos=0;
+		
+        
+        /* On récupère la liste des clients pour gérer l'unicité des pseudos */
+        String line;
+        try 
+	  	  {
+				 
+	  		//On lit et on affiche ce que le server envoie
+			int nbClients = Integer.parseInt(socIn.readLine());
+			
+			while(nbPseudos<nbClients)
+			//code pour ajouter un client connecté
+			{
+				line = socIn.readLine();
+				String name="";
+				for(int i=8;i<line.length();i++)
+				{
+					name+=line.charAt(i);
+				}
+				pseudos[nbPseudos]=name;
+				nbPseudos++;
+				
+			}
+			
+  	  	}//try
+    	catch (Exception e) 
+    	{
+        	System.err.println("Error in EchoServer:" + e);
+        	e.printStackTrace();
+        }//catch
+        
+        IHMLogin fenetreLogin = new IHMLogin(pseudos, nbPseudos);
         
         /* Pseudo */
-        //System.out.println("Veuillez entrer votre pseudo: ");
-		//pseudo = stdIn.readLine();		
-        
-		/* Debut du chat */
-        String lineClient;
-
-        while (true) 
+        //Tant que le client n'a pas rentré un pseudo correct, on attend
+        while (fenetreLogin.getActivite())
         {
-        	//On lit et on affiche ce que le server envoie
-        	//lineServer=socIn.readLine();
-        	//System.out.println(lineServer);
-        	
-        	//On lit ce qu on ecrit
-        	
-        	lineClient=stdIn.readLine();
-        	//System.out.println(pseudo+" : "+lineClient);
-        	socOut.println(ct.getPseudoClient()+" : "+lineClient);
-        	
-        	
-        	if (lineClient.equals(".")) break;
-        	//socOut.println(lineClient);
-        	//System.out.println("echo: " + socIn.readLine());
+        	System.out.print("");
+        	//System.out.println("Nombre de clients : "+Server.clients.length);
         }
-		socOut.close();
-		socIn.close();
-		stdIn.close();
-		echoSocket.close();
-    }
+        //On ajoute le client à la liste des clients
+        pseudo=fenetreLogin.getPseudo();
+        fenetreLogin.dispose();
+        
+        //Il faut renvoyer à tout le monde la liste des clients
+        for(int i=0;i<nbPseudos;i++)
+        {
+        	socOut.println("%insert%"+pseudos[i]);
+        }
+        
+        IHMChat fenetreChat = new IHMChat(pseudo,socOut);
+        socOut.println("%insert%"+pseudo);
+        socOut.print("Server > ALL : "+pseudo+" joined the conversation.\n");
+        
+        
+        
+        ClientThread ct = new ClientThread(socIn, fenetreChat);
+
+        
+        ct.start();
+        
+        //Client quitte la conversation
+        while (fenetreChat.getActiveClient())
+        {
+        	System.out.print("");
+        }
+        socOut.println("%remove%"+pseudo);
+        socOut.print("Server > ALL : "+pseudo+" just left the conversation.\n");
+        try
+        {
+        	fenetreChat.dispose();
+        	/*while (ct.getDone()==false)
+        	//Tant que le thread n'a pas fini d'envoyer ses informations on attend
+            {
+            	System.out.print("");
+            }*/
+        	
+        	while(ct.getDone()==true && socIn.read()!=(-1))
+			//Tant qu'on a pas récupérer toutes les informations du canal
+			{
+				line=socIn.readLine();
+				System.out.println("Still reading...");
+			}
+        	System.out.println("On ferme tout");
+        	socOut.close();
+			socIn.close();
+			echoSocket.close();
+        }
+        catch(Exception e)
+        {
+        	e.printStackTrace();
+        }
+		
+			
+			
+			
+	}
+    
     
 }
