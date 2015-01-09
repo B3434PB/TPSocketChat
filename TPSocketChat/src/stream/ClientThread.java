@@ -4,6 +4,10 @@
  * Date: 14/12/08
  * Authors:
  */
+
+/**
+ * Package contenant l'ensemble des classes
+ */
 package stream;
 
 import java.io.*;
@@ -11,15 +15,33 @@ import java.net.*;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+/**
+ * Processus client associe a un Client
+ * @author Papin Bayart
+ *
+ */
 public class ClientThread extends Thread 
 {
 	
+	/**
+	 * Permet de lire les messages qu'on recoit du serveur
+	 */
 	private BufferedReader socIn;
+	/**
+	 * Interface graphique du chat
+	 */
 	private IHMChat frame;
+	/**
+	 * Le Client a quitte le chat ou non
+	 */
 	private boolean done=false;
 
 	
-	
+	/**
+	 * Constructeur de ClientThread
+	 * @param aSocIn : permet de lire les flux entrant envoyés par le serveur
+	 * @param aFrame : interface graphique du chat associées au client
+	 */
 	ClientThread (BufferedReader aSocIn, IHMChat aFrame) {
 		this.socIn = aSocIn;
 		frame=aFrame;
@@ -27,15 +49,10 @@ public class ClientThread extends Thread
 	}
 
  	/**
-  	* receives a request from client then sends an echo to the client
-  	* @param clientSocket the client socket
+  	* Receives a request from client then sends an echo to the client
   	**/
 	public void run() 
-	{
-    	 
-    		//BufferedReader socIn=new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));    
-    		//PrintStream socOut=new PrintStream(clientSocket.getOutputStream());
-			
+	{		
     		String lineClient;
     		while (true) 
     		{
@@ -140,13 +157,12 @@ public class ClientThread extends Thread
     	
     }//main
 	
-	
+	/**
+	 * Accesseur a done
+	 * @return boolean done
+	 */
 	public boolean getDone()
 	{
 		return done;
 	}
-	
-
-	
-  
 }

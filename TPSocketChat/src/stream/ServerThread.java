@@ -4,6 +4,9 @@
  * Date: 14/12/08
  * Authors:
  */
+/**
+ * Package contenant l'ensemble des classes
+ */
 package stream;
 
 import java.io.*;
@@ -11,19 +14,28 @@ import java.net.*;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+/**
+ * Processus serveur associé à un Client
+ * @author Papin Bayart
+ *
+ */
 public class ServerThread extends Thread 
 {
-	
+	/**
+	 * Socket associée au client
+	 */
 	private Socket clientSocket;
-
 	
+	/**
+	 * Constructeur de ServerThread
+	 * @param s : Socket associée au client
+	 */
 	ServerThread (Socket s) {
 		this.clientSocket = s;
 	}
 
  	/**
-  	* receives a request from client then sends an echo to the client
-  	* @param clientSocket the client socket
+  	* Receives a request from client then sends an echo to the client
   	**/
 	public void run() 
 	{
@@ -85,12 +97,19 @@ public class ServerThread extends Thread
     }//main
 	
 	
+	/**
+	 * Accesseur à clientSocket
+	 * @return Socket clientSocket
+	 */
 	Socket getClientSocket()
 	{
 		return clientSocket;
 	}
 	
-	
+	/**
+	 * Envoie le message en paramètre à un Client sous forme de flux.
+	 * @param message : message envoyé par un client
+	 */
 	public void Envoyer(String message)
 	{
 		try {
@@ -98,7 +117,6 @@ public class ServerThread extends Thread
 			socOut.println(message);
 			socOut.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

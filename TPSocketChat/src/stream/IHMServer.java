@@ -1,3 +1,6 @@
+/**
+ * Package contenant l'ensemble des classes
+ */
 package stream;
 
 import javax.swing.BoxLayout;
@@ -12,24 +15,69 @@ import javax.swing.JButton;
 import java.awt.event.*;
 import java.util.ListIterator;
 
-
+/**
+ * Interface graphique du serveur pour entrer le port du serveur
+ * @author Papin Bayart
+ */
 
 public class IHMServer extends JFrame 
 {
+	/**
+	 * Contient demandePort et emplacementPort
+	 */
 	private JPanel pan;
+	/**
+	 * Contient boutonActiver
+	 */
 	private JPanel pan2;
+	/**
+	 * Contient errors
+	 */
 	private JPanel pan3;
+	/**
+	 * Contient boutonNonPerm et boutonPerm
+	 */
 	private JPanel pan4;
+	/**
+	 * Emplacement pour entrer le numéro de port
+	 */
 	private JTextField emplacementPort;
+	/**
+	 * Texte demandant d'entrer le numéro de port
+	 */
 	private JLabel demandePort;
+	/**
+	 * Bouton permettant de lancer le server
+	 */
 	public JButton boutonActiver;
+	/**
+	 * Bouton permettant d'utiliser l'historique permanent
+	 */
 	public JButton boutonPerm;
+	/**
+	 * Bouton permettant d'utiliser l'historique non permanent
+	 */
 	public JButton boutonNonPerm;
+	/**
+	 * Texte contenant les erreurs
+	 */
 	private JLabel errors;
+	/**
+	 * Chaine de caractères contenant le numéro de port
+	 */
 	private String portNumber="";
+	/**
+	 * IHM activée ou non
+	 */
 	private boolean activite=true;
+	/**
+	 * Historique permanent utilisé ou non
+	 */
 	private boolean permanent=false;
 	
+	/**
+	 * Constructeur de IHMServer
+	 */
 	public IHMServer()
 	{
 		this.setTitle("Port number");
@@ -135,16 +183,28 @@ public class IHMServer extends JFrame
 		this.setVisible(true);
 	  }
 	
+	/**
+	 * Accesseur à portNumber
+	 * @return String portNumber
+	 */
 	public String getPortNumber()
 	{
 		return portNumber;
 	}
 	
+	/**
+	 * Accesseur à activite
+	 * @return boolean activite
+	 */
 	public boolean getActivite()
 	{
 		return activite;
 	}
 	
+	/**
+	 * Accesseur à permanent
+	 * @return boolean permanent
+	 */
 	public boolean getPermanent()
 	{
 		return permanent;

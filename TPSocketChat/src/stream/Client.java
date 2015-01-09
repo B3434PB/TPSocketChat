@@ -4,6 +4,10 @@
  * Date: 10/01/04
  * Authors:
  */
+
+/**
+ * Package contenant l'ensemble des classes
+ */
 package stream;
 
 import java.io.*;
@@ -14,15 +18,18 @@ import java.util.ListIterator;
 
 import javax.swing.DefaultListModel;
 
-
+/**
+ * Client pouvant se connecter à un serveur
+ * @author Papin Byart
+ */
 
 public class Client {
 	
-	//Booléen qui indique que l'on doit arrêter la connexion
-
   /**
-  *  main method
+  *  Main method
   *  accepts a connection, receives a message from client then sends an echo to the client
+  *  @param args : tableau inutilisé
+  *  @throws IOException
   **/
     public static void main(String[] args) throws IOException {
     	
@@ -112,7 +119,6 @@ public class Client {
         while (fenetreLogin.getActivite())
         {
         	System.out.print("");
-        	//System.out.println("Nombre de clients : "+Server.clients.length);
         }
         //On ajoute le client à la liste des clients
         pseudo=fenetreLogin.getPseudo();
@@ -145,11 +151,6 @@ public class Client {
         try
         {
         	fenetreChat.dispose();
-        	/*while (ct.getDone()==false)
-        	//Tant que le thread n'a pas fini d'envoyer ses informations on attend
-            {
-            	System.out.print("");
-            }*/
         	
         	while(ct.getDone()==true && socIn.read()!=(-1))
 			//Tant qu'on a pas récupérer toutes les informations du canal
@@ -166,11 +167,5 @@ public class Client {
         {
         	e.printStackTrace();
         }
-		
-			
-			
-			
 	}
-    
-    
 }

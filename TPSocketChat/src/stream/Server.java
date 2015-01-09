@@ -4,6 +4,10 @@
  * Date: 10/01/04
  * Authors:
  */
+
+/**
+ * Package contenant l'ensemble des classes
+ */
 package stream;
 
 import java.io.*;
@@ -20,17 +24,33 @@ import java.io.FileWriter;
 import java.io.File;
 
 
+/**
+ * Serveur acceptant et faisant le lien entre les clients
+ * @author Papin Bayart
+ */
+
 public class Server  {
-  
-	//Repertorier l ensemble des clients connectes au serveur
+	/**
+	 * Répertorie l'ensemble des processus serveur connectés au serveur
+	 */
 	static LinkedList<ServerThread> threads;
+	/**
+	 * Liste des messages envoyés
+	 */
 	static ArrayList<String> messages;
+	/**
+	 * Liste des pseudos des Clients
+	 */
 	static ArrayList<String> clients;
+	/**
+	 * numéro de port de serveur
+	 */
 	private static String port="";
+	
+	
  	/**
-  	* main method
-	* @param EchoServer port
-  	* 
+  	* Main method
+  	* @param args : tableau inutilisé
   	**/
 	public static void main(String args[]){ 
         ServerSocket listenSocket;
@@ -127,6 +147,4 @@ public class Server  {
  		   threads.get(i).Envoyer(message);
  	   }
     }
-	
-	
   }//class

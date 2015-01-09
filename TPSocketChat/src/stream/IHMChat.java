@@ -1,3 +1,6 @@
+/**
+ * Package contenant l'ensemble des classes
+ */
 package stream;
 
 import java.awt.*;
@@ -7,26 +10,80 @@ import java.io.PrintStream;
 import javax.swing.*;
 import javax.swing.event.*;
 
+/**
+ * Interface graphique du chat
+ * @author Papin Bayart
+ *
+ */
 
 public class IHMChat extends JFrame 
 {
-	 
+	/**
+	 * Contient messages et clients
+	 */
 	JPanel panHaut;
+	/**
+	 * Contient boutonSent, espace, boutonQuit, textFieldClient
+	 */
 	JPanel panBas;
+	/**
+	 * Contient conversation
+	 */
 	JScrollPane messages;
+	/**
+	 * Contient textFieldClients
+	 */
 	JScrollPane clients;
+	/**
+	 * Contient les pseudos
+	 */
 	JList listeClients;
+	/**
+	 * Contenant les pseudos
+	 */
 	JTextField textFieldClient;
+	/**
+	 * Permet d'envoyer un message
+	 */
 	JButton boutonSent;
+	/**
+	 * Nom d'un client
+	 */
 	String client;
+	/**
+	 * Nom du destinataire selectionne
+	 */
 	String destinataire;
+	/**
+	 * Anciens messages
+	 */
 	JTextArea conversation;
+	/**
+	 * Utilité ésthetique seulement
+	 */
 	JLabel espace;
+	/**
+	 * Permet de quitter le chat
+	 */
 	JButton boutonQuit;
+	/**
+	 * Chat active ou non
+	 */
 	private boolean active=true;
+	/**
+	 * Flux pour communiquer avec le server
+	 */
 	PrintStream socOut;
+	/**
+	 * Attribut de la JList contenant les Clients
+	 */
 	static DefaultListModel listeModelClients = new DefaultListModel();
 	
+	/**
+	 * Constructeur de IHMChat
+	 * @param aClient : pseudo du client
+	 * @param aSocOut : flux permettant l'échange entre serveur et client
+	 */
 	  public IHMChat(String aClient, PrintStream aSocOut)
 	  {
 		  client=aClient;
@@ -44,10 +101,7 @@ public class IHMChat extends JFrame
 		  this.add(panHaut);
 		  panBas = new JPanel();
 		  panBas.setLayout( new FlowLayout() );
-		  //panHaut.setPreferredSize(new Dimension (800, 100));
-		  this.add(panBas);
-		  //Définition de sa couleur de fond
-		  //panHaut.setBackground(Color.RED);        
+		  this.add(panBas);      
 		 
 		  
 		  /* PanHaut */
@@ -130,6 +184,10 @@ public class IHMChat extends JFrame
 		  
 	  }
 
+	  /**
+	   * Acceseur à active
+	   * @return boolean active
+	   */
 	  public boolean getActiveClient()
 	  {
 		  return active;
