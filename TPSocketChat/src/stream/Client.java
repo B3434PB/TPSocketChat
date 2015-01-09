@@ -27,20 +27,31 @@ public class Client {
     public static void main(String[] args) throws IOException {
     	
     	String pseudo=("");
+    	String port=("");
+    	String host=("");
         Socket echoSocket = null;
         PrintStream socOut = null;
         BufferedReader socIn = null;
         
-        if (args.length < 2) {
-			System.out.println("Usage: java ClientEnvoi <Serveur host> <Serveur port>");
-			System.exit(1);
-		}
-
+        
+        
+        /* Port et host */
+        IHMClientSettings fenetreSet = new IHMClientSettings();
+        
+        while (fenetreSet.getActivite())
+        {
+        	System.out.print("");
+        }
+        
+        port=fenetreSet.getPort();
+        host=fenetreSet.getHost();
+        System.out.println("port : "+port+" , host : "+host);
+        fenetreSet.dispose();
 
         try 
         {
       	    // creation socket ==> connexion
-      	    echoSocket = new Socket(args[0],new Integer(args[1]).intValue());
+      	    echoSocket = new Socket(host,new Integer(port).intValue());
       	    
       	    //Classe BufferedReader permet de lire les caracteres a partir d un flux tamponne
       	    //Lire ce que le server ecrit
@@ -52,12 +63,12 @@ public class Client {
         } 
         catch (UnknownHostException e) 
         {
-            System.err.println("Don't know about host:" + args[0]);
+            System.err.println("Don't know about host:" + host);
             System.exit(1);
         } 
         catch (IOException e) 
         {
-            System.err.println("Couldn't get I/O for "+ "the connection to:"+ args[0]);
+            System.err.println("Couldn't get I/O for "+ "the connection to:"+ port);
             System.exit(1);
         }
         

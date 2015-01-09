@@ -15,6 +15,9 @@ import java.util.TreeMap;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.File;
 
 
 public class Server  {
@@ -23,6 +26,7 @@ public class Server  {
 	static LinkedList<ServerThread> threads;
 	static ArrayList<String> messages;
 	static ArrayList<String> clients;
+	private static String port="";
  	/**
   	* main method
 	* @param EchoServer port
@@ -38,14 +42,19 @@ public class Server  {
         clients.add("ALL");
         messages= new ArrayList<String>();
         
-	    //On verifie qu on juste un numero de port en parametre    
-	  	if (args.length != 1) {
-	          System.out.println("Usage: java EchoServer <EchoServer port>");
-	          System.exit(1);
-	  	}
+        IHMServer settings = new IHMServer();
+        
+        while (settings.getActivite())
+        {
+        	System.out.print("");
+        }
+        port=settings.getPortNumber();
+        boolean permanent=settings.getPermanent();
+        settings.dispose();
+	    
 		try 
 		{
-			listenSocket = new ServerSocket(Integer.parseInt(args[0])); //port 
+			listenSocket = new ServerSocket(Integer.parseInt(port)); //port 
 			
 			
 			System.out.println("Server ready..."); 
@@ -54,7 +63,6 @@ public class Server  {
 			{
 				//Attends qu un client se connecte
 				Socket clientSocket = listenSocket.accept();
-				System.out.println("Someone joined the conversation !");
 	    		
 				//On instancie un flux de sortie vers le client qui vient de se connecter
 				out = new PrintWriter (clientSocket.getOutputStream());
@@ -72,14 +80,21 @@ public class Server  {
 				}
 				
 				/* On affiche l'historique */
-				if (messages.isEmpty()==false)
+				if (permanent)
 				{
-					ListIterator<String> iter = Server.messages.listIterator();
-				    while (iter.hasNext())
-				    {
-				    	//socOut = iter.next().getClientSocket().getOutputStream();
-				    	out.println(iter.next());
-				    }
+					
+				}
+				else
+				{
+					if (messages.isEmpty()==false)
+					{
+						ListIterator<String> iter = Server.messages.listIterator();
+					    while (iter.hasNext())
+					    {
+					    	//socOut = iter.next().getClientSocket().getOutputStream();
+					    	out.println(iter.next());
+					    }
+					}
 				}
 				
 				out.println("Server > Me : You are connected to "+InetAddress.getLocalHost()+" ! ");

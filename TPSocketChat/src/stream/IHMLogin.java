@@ -23,8 +23,14 @@ public class IHMLogin extends JFrame
 	private JPanel pan;
 	private JPanel pan2;
 	private JPanel pan3;
+	private JPanel pan4;
+	private JPanel pan5;
 	private JTextField emplacementLogin;
 	private JLabel demandeLogin;
+	private JTextField portField;
+	private JLabel portLabel;
+	private JTextField hostField;
+	private JLabel hostLabel;
 	public JButton boutonConnect;
 	private JButton boutonAllUser;
 	private String pseudo="";
@@ -39,23 +45,17 @@ public class IHMLogin extends JFrame
 		nbPseudos=taille;
 		
 		this.setTitle("Login");
-		this.setSize(400, 145);
+		this.setSize(350, 190);
 	    this.setLocationRelativeTo(null);
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 		  
-		//Instanciation d'un objet JPanel
-		pan = new JPanel();
-		pan.setPreferredSize(new Dimension(375, 115));
-		pan.setBackground(Color.LIGHT_GRAY);
 		BoxLayout boxLayout = new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS); // top to bottom
 		this.getContentPane().setLayout(boxLayout);
-		//pan.setLayout(new FlowLayout());
-		this.add(pan);
-
-		//On prévient notre JFrame que notre JPanel sera son content pane
-		              
-		this.setVisible(true);
 		
+		/* Login */
+		pan = new JPanel();
+		pan.setBackground(Color.LIGHT_GRAY);
+		this.add(pan);
 		demandeLogin=new JLabel("Veuillez entrer votre pseudo");
 		demandeLogin.setPreferredSize(new Dimension(175, 25));
 		pan.add(demandeLogin);
@@ -65,6 +65,9 @@ public class IHMLogin extends JFrame
 		emplacementLogin.setVisible(true);
 		pan.add(emplacementLogin);
 		
+		
+		
+		/* bouton connect */
 		pan2 = new JPanel();
 		pan2.setBackground(Color.LIGHT_GRAY);
 		this.add(pan2);
@@ -72,12 +75,13 @@ public class IHMLogin extends JFrame
 		boutonConnect.setPreferredSize(new Dimension(100, 32));
 		pan2.add(boutonConnect);
 		
-		pan3 = new JPanel();
-		pan3.setBackground(Color.LIGHT_GRAY);
-		this.add(pan3);
+		/* Message d'erreur */
+		pan5 = new JPanel();
+		pan5.setBackground(Color.LIGHT_GRAY);
+		this.add(pan5);
 		errors = new JLabel();
 		errors.setForeground(Color.RED);
-		pan3.add(errors);
+		pan5.add(errors);
 		
 		
 		boutonConnect.addActionListener(new ActionListener() {
@@ -91,7 +95,7 @@ public class IHMLogin extends JFrame
 				{
 					errors.setText("Name already chosen by someone else !");
 				}
-				else 
+				else
 				{
 					pseudo=emplacementLogin.getText();
 					errors.setText("");
@@ -122,7 +126,7 @@ public class IHMLogin extends JFrame
 		
 		this.getContentPane().add(pan);
 		this.getContentPane().add(pan2);
-		this.getContentPane().add(pan3); 
+		this.getContentPane().add(pan5); 
 		this.setVisible(true);
 	  }
 	
@@ -132,6 +136,8 @@ public class IHMLogin extends JFrame
 	{
 		return pseudo;
 	}
+	
+	
 	
 	public boolean getActivite()
 	{
